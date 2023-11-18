@@ -54,5 +54,6 @@ int main() {
     }
 
     arquivoBinario.close();
+    system("pause");
     return 0;
 }

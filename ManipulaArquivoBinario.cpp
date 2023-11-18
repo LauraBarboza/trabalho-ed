@@ -17,15 +17,6 @@ struct Atributos {
     char e[1];
 };
 
-// Sobrecarga de operador para fazer cout de struct
-ostream &operator<<(ostream &saida, const Atributos &a) {
-    saida << a.id << ", " << a.latitude << ", "
-          << a.longitude << ", " << a.descricao << ", "
-          << a.zip << ", " << a.title << ", " << a.timeStamp
-          << ", " << a.twp << ", " << a.addr << ", " << a.e << endl;
-    return saida;
-}
-
 void imprimirAtributo(const char *atributo, size_t tamanho) {
     for (size_t i = 0; i < tamanho; ++i) {
         if (atributo[i] != '\0') // não imprime null
@@ -112,7 +103,17 @@ void imprimirTodos() {
     arquivo_bin.seekg(sizeof(unsigned));
     for (unsigned i = 0; i < totalElementos; i++) {
         arquivo_bin.read((char *)&linha, sizeof(Atributos));
-        cout << linha;
+        imprimirAtributo(linha.id, sizeof(linha.id));
+        imprimirAtributo(linha.latitude, sizeof(linha.latitude));
+        imprimirAtributo(linha.longitude, sizeof(linha.longitude));
+        imprimirAtributo(linha.descricao, sizeof(linha.descricao));
+        imprimirAtributo(linha.zip, sizeof(linha.zip));
+        imprimirAtributo(linha.title, sizeof(linha.title));
+        imprimirAtributo(linha.timeStamp, sizeof(linha.timeStamp));
+        imprimirAtributo(linha.twp, sizeof(linha.twp));
+        imprimirAtributo(linha.addr, sizeof(linha.addr));
+        imprimirAtributo(linha.e, sizeof(linha.e));
+        cout << endl;
     }
 }
 
@@ -140,10 +141,10 @@ int main() {
     int opcao;
     do {
         cout << "1 - Adicionar elemento em posicao especifica" << endl;
-        cout << "2 - Ler elemento" << endl;
+        cout << "2 - Ler um elemento em posicao especifica" << endl;
         cout << "3 - Ler intervalo de elementos" << endl;
         cout << "4 - Imprimir todos" << endl;
-        cout << "5 - Alterar registro" << endl;
+        cout << "5 - Alterar registro em posicao especifica" << endl;
         cout << "6 - Trocar registros" << endl;
         cout << "0 - Sair" << endl;
         cout << "Opcao: ";
