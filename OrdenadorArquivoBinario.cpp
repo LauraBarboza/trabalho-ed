@@ -1,22 +1,32 @@
+/*****************************************************
+ * Código 2: Ordenação Externa
+ * Criadores: Laura Sarto - Matrícula: 202120154
+ *            Dominique Antunes - Matrícula: 202020377
+ * Descrição: Este código realiza a ordenação externa 
+ *            de dados armazenados em arquivos binários 
+ *            usando arquivos auxiliares.
+ *****************************************************/
+
+
 #include <cstdio>
 #include <iostream>
 #include <cmath>
 #include <fstream>
 #include <cstring>
-#include "ManipulaArquivoBinario.cpp"
+#include "Atributos.h"
 
 using namespace std;
-
-fstream arqF1("f1.bin", ios::binary | ios::in | ios::out); //cria arquivos auxiliares para realizar a ordenação
-fstream arqF2("f2.bin", ios::binary | ios::in | ios::out);
-fstream arqS1("s1.bin", ios::binary | ios::in | ios::out);
-fstream arqS2("s2.bin", ios::binary | ios::in | ios::out);
 
 void unirArquivos(int etapa, int entradas);
 
 void dividirArquivo(){
+	cout << "passou por aqui dividir arquivos" << endl;
 	Atributos* registroAuxiliar = new Atributos;
 	fstream arquivo("call911_1.bin", ios::binary | ios::in | ios::out); // abre o arquivo a ser dividido
+	fstream arqF1("f1.bin", ios::binary | ios::in | ios::out); //cria arquivos auxiliares para realizar a ordenação
+	fstream arqF2("f2.bin", ios::binary | ios::in | ios::out);
+	fstream arqS1("s1.bin", ios::binary | ios::in | ios::out);
+	fstream arqS2("s2.bin", ios::binary | ios::in | ios::out);
 
     unsigned totalElementos;
     arquivo.seekg(0);
@@ -49,10 +59,10 @@ void ordenarArquivo(int etapa, int tamOriginal, int entradas){ // funcao de orde
 	Atributos* registroAux1 = new Atributos; // armazena registros do f1.bin ou s1.bin
 	Atributos* registroAux2 = new Atributos; // armazena registros do f2.bin ou s2.bin
 
-	// fstream arqF1; // somente declarando as variáveis de entrada e saída
-	// fstream arqF2;
-	// fstream arqS1;
-	// fstream arqS2;
+	fstream arqF1; // somente declarando as variáveis de entrada e saída
+	fstream arqF2;
+	fstream arqS1;
+	fstream arqS2;
 
 	if (entradas == 1){ // se os arquivos de entrada forem os f1 e f2
 		remove( "s1.bin" ); // limpa os dados dos arquivos s1 e s2 para sua posterior escrita
@@ -96,7 +106,7 @@ void ordenarArquivo(int etapa, int tamOriginal, int entradas){ // funcao de orde
 							arqF2.read((char *) registroAux2, sizeof(Atributos));
 					}else{
 						if (registroAux1->id < registroAux2->id){ // verifica qual o maior id entre os dois registros para assim escreve-lo no arquivo
-							arqS1.write((char *) registroAux1, sizeof(Atributos)); 
+							arqS1.write((char *) registroAux1, sizeof(Atributos));
 							contadorRegistroAux1++;
 							if (contadorRegistroAux1 < tamBloco) // se o contador registroAux1 for menor que o tamanho do bloco, copiará o próximo registro
 								arqF1.read((char *) registroAux1, sizeof(Atributos));
@@ -133,7 +143,7 @@ void ordenarArquivo(int etapa, int tamOriginal, int entradas){ // funcao de orde
 					}
 				}
 			}
-			while (contadorRegistroAux1 < tamBloco and !arqF1.eof()){ // se ao sair do loop acima, ainda existirem registros no arqF1, eles serão escritos no arquivo definido pelo contador
+			while (contadorRegistroAux1 < tamBloco and !arqF1.eof()){ // se ao sair do loop acima, o bloco não terminou e ainda existirem registros no arqF1, eles serão escritos no arquivo definido pelo contador
 				if (contador % 2 != 0){ 
 					arqS1.write((char *) registroAux1, sizeof(Atributos)); 
 					contadorRegistroAux1++;
@@ -146,7 +156,7 @@ void ordenarArquivo(int etapa, int tamOriginal, int entradas){ // funcao de orde
 						arqF1.read((char *) registroAux1, sizeof(Atributos));
 				}
 			}
-			while (contadorRegistroAux2 < tamBloco and !arqF2.eof()){ // se ao sair do loop acima, ainda existirem registros no arqF2, eles serão escritos no arquivo definido pelo contador
+			while (contadorRegistroAux2 < tamBloco and !arqF2.eof()){ // se ao sair do loop acima, o bloco ainda não terminou e ainda existirem registros no arqF2, eles serão escritos no arquivo definido pelo contador
 				if (contador % 2 != 0){
 					arqS1.write((char *) registroAux2, sizeof(Atributos));
 					contadorRegistroAux2++;
@@ -197,10 +207,9 @@ void ordenarArquivo(int etapa, int tamOriginal, int entradas){ // funcao de orde
 	
 	if (2*tamBloco < tamOriginal/2){ // se o tamanho do bloco (que agora será o dobro do começo da função) for menor do que 1/2 do tamanho original, as mesmas ações acima serão realizadas, porém com os arquivos de entrada agora sendo os de saída e vice-versa
 		if(entradas == 1){
-			ordenarArquivo(etapa+1, tamOriginal, 34);
-		}
-		else{
-			ordenarArquivo(etapa+1, tamOriginal, 12);
+			ordenarArquivo(etapa+1, tamOriginal, 2);
+		}else{
+			ordenarArquivo(etapa+1, tamOriginal, 1);
 		}
 	}
 	else { // se o tamanho do bloco for igual ou maior do que 1/4 do tamanho original, chegou a etapa final, ou seja, unirá os dois arquivos finais
@@ -214,25 +223,27 @@ void ordenarArquivo(int etapa, int tamOriginal, int entradas){ // funcao de orde
 }
 
 
-void unirArquivos(int etapa, int entradas){ // funcao chamada quando os arquivos finais escritos forem o aux1 e o aux2
+void unirArquivos(int etapa, int entradas){ // funcao chamada quando os arquivos finais escritos forem o F1 e o F2
 	double tamBloco = pow(2, etapa);
-	Atributos* registroAux1 = new Atributos; // armazena registros do aux1.bin ou aux3.bin
-	Atributos* registroAux2 = new Atributos; // armazena registros do aux2.bin ou aux4.bin
-	remove("AtributosBin.bin"); // limpa os dados do arquivo principal dadosBin.bin para sua posterior escrita
+	Atributos* registroAux1 = new Atributos; // armazena registros do f1.bin ou s1.bin
+	Atributos* registroAux2 = new Atributos; // armazena registros do f2.bin ou s2.bin
+	remove("call911_1.bin"); // limpa os dados do arquivo principal dadosBin.bin para sua posterior escrita
 
 	fstream arqF1;
 	fstream arqF2;
 
-	if(entradas == 12){ // se os arquivos de entrada forem os aux1 e aux2
-		arqF1.open("aux1.bin", ios::binary | ios::in); // abre os arquivos aux1 e aux2 para leitura
-		arqF2.open("aux2.bin", ios::binary | ios::in);
+	if(entradas == 1){ // se os arquivos de entrada forem os F1 e F2
+		arqF1.open("f1.bin", ios::binary | ios::in); // abre os arquivos F1 e F2 para leitura
+		arqF2.open("f2.bin", ios::binary | ios::in);
 	}
 	else{
-		arqF1.open("aux3.bin", ios::binary | ios::in); // abre os arquivos aux3 e aux4 para leitura
-		arqF2.open("aux4.bin", ios::binary | ios::in); 
+		arqF1.open("s1.bin", ios::binary | ios::in); // abre os arquivos S1 e S2 para leitura
+		arqF2.open("s2.bin", ios::binary | ios::in); 
 	}
 
-	fstream arqS1("AtributosBin.bin", ios::binary | ios::out); //abre o arquivo dadosBin.bin para escrita
+	fstream arqS1("call911_1.bin", ios::binary | ios::out); //abre o arquivo dadosBin.bin para escrita
+	unsigned contadorRegistros = 0;
+	arqS1.seekg(sizeof(contadorRegistros)); // começar 4 bytes a frente para escrever o contador depois
 	
 	int i = 0; // contador registroAux1
 	int j = 0; // contador registroAux2
@@ -244,22 +255,26 @@ void unirArquivos(int etapa, int entradas){ // funcao chamada quando os arquivos
 			if (strcmp(registroAux1->descricao, registroAux2->descricao)<0){ // verifica qual descricao vem antes na ordem alfabetica entre os dois registros para assim escreve-lo no arquivo
 				arqS1.write((char *) registroAux1, sizeof(Atributos));
 				i++;
+				contadorRegistros++;
 				if (i < tamBloco) // se o contador registroAux1 for menor que o tamanho do bloco, copiará o próximo registro
 					arqF1.read((char *) registroAux1, sizeof(Atributos));
 			}else if (strcmp(registroAux1->descricao, registroAux2->descricao)>0){
 				arqS1.write((char *) registroAux2, sizeof(Atributos));
 				j++;
+				contadorRegistros++;
 				if (j < tamBloco)  // se o contador registroAux2 for menor que o tamanho do bloco, copiará o próximo registro
 					arqF2.read((char *) registroAux2, sizeof(Atributos));
 			}else{
 				if (registroAux1->id < registroAux2->id){ // verifica qual o maior id entre os dois registros para assim escreve-lo no arquivo
 					arqS1.write((char *) registroAux1, sizeof(Atributos)); 
 					i++;
+					contadorRegistros++;
 					if (i < tamBloco) // se o contador registroAux1 for menor que o tamanho do bloco, copiará o próximo registro
 						arqF1.read((char *) registroAux1, sizeof(Atributos));
 				}else{
 					arqS1.write((char *) registroAux2, sizeof(Atributos));
 					j++;
+					contadorRegistros++;
 					if (j < tamBloco)  // se o contador registroAux2 for menor que o tamanho do bloco, copiará o próximo registro
 						arqF2.read((char *) registroAux2, sizeof(Atributos));
 				}
@@ -268,12 +283,14 @@ void unirArquivos(int etapa, int entradas){ // funcao chamada quando os arquivos
 		while (i < tamBloco and !arqF1.eof()){ // verifica se, ao sair do looping acima, ainda existem registros no arqF1 e escreve-os no arquivo definido pelo contador
 			arqS1.write((char *) registroAux1, sizeof(Atributos));
 			i++;
+			contadorRegistros++;
 			if (i < tamBloco)
 				arqF1.read((char *) registroAux1, sizeof(Atributos));
 		}
 		while (j < tamBloco and !arqF2.eof()){ // verifica se, ao sair do looping acima, ainda existem registros no arqF2 e escreve-os no arquivo definido pelo contador
 				arqS1.write((char *) registroAux2, sizeof(Atributos));
 				j++;
+				contadorRegistros++;
 				if (j < tamBloco)
 					arqF2.read((char *) registroAux2, sizeof(Atributos));
 		}
@@ -283,21 +300,27 @@ void unirArquivos(int etapa, int entradas){ // funcao chamada quando os arquivos
 		arqS1.write((char *) registroAux1, sizeof(Atributos)); // pela lógica de curto-circuito, o registro do arqF1 foi copiado
 		while (arqF1.read((char *) registroAux1, sizeof(Atributos))){ // copiará todos os registros do arqF1 até chegar ao final
 			arqS1.write((char *) registroAux1, sizeof(Atributos));
+			contadorRegistros++;
 		}
 	}
 	else if (!arqF2.eof()){ //Se foi o arqF1 que chegou ao final, copia o restante do arqF2 para o arqS1
 		while (arqF2.read((char *) registroAux2, sizeof(Atributos))){ // copiará todos os registros do arqF2 até chegar ao final
 			arqS1.write((char *) registroAux2, sizeof(Atributos));
+			contadorRegistros++;
 		}
 	}
 
+	arqS1.seekg(0);
+	arqS1.write((char *)&contadorRegistros,sizeof(contadorRegistros));
+
+
 	arqF1.close(); // fecha os arquivos
 	arqF2.close();
-	arqS1.close();
+	// arqS1.close();
 	delete registroAux1; // desaloca os registros auxiliares
 	delete registroAux2;
-	remove( "aux1.bin" ); // deleta os arquivos auxiliares
-	remove( "aux2.bin" ); 
-	remove( "aux3.bin" ); 
-	remove( "aux4.bin" ); 
+	remove( "f1.bin" ); // deleta os arquivos auxiliares
+	remove( "f2.bin" ); 
+	remove( "s1.bin" ); 
+	remove( "s2.bin" ); 
 }

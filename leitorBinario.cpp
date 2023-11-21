@@ -3,18 +3,18 @@
 
 using namespace std;
 
-struct Atributos {
-    char id[6];
-    char latitude[10];
-    char longitude[11];
-    char descricao[100];
-    char zip[7];
-    char title[50];
-    char timeStamp[20];
-    char twp[20];
-    char addr[50];
-    char e[1];
-};
+// struct Atributos {
+//     char id[6];
+//     char latitude[10];
+//     char longitude[11];
+//     char descricao[100];
+//     char zip[7];
+//     char title[50];
+//     char timeStamp[20];
+//     char twp[20];
+//     char addr[50];
+//     char e[1];
+// };
 
 void imprimirAtributo(const char* atributo, size_t tamanho) {
     for (size_t i = 0; i < tamanho; ++i) {

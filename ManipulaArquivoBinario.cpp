@@ -1,21 +1,18 @@
+/*****************************************************
+ * Código 1: Manipulação de Arquivo Binário
+ * Criadores: Laura Sarto - Matrícula: 202120154
+ *            Dominique Antunes - Matrícula: 202020377
+ * Descrição: Este código implementa funções para 
+ *            manipular um arquivo binário, incluindo 
+ *            adicionar, ler, alterar e ordenar registros.
+ *****************************************************/
+
 #include <fstream>
 #include <iostream>
+#include "OrdenadorArquivoBinario.cpp"
 using namespace std;
 
 fstream arquivo_bin("call911_1.bin");
-
-struct Atributos {
-    char id[6];
-    char latitude[10];
-    char longitude[11];
-    char descricao[100];
-    char zip[7];
-    char title[50];
-    char timeStamp[20];
-    char twp[20];
-    char addr[50];
-    char e[1];
-};
 
 void imprimirAtributo(const char *atributo, size_t tamanho) {
     for (size_t i = 0; i < tamanho; ++i) {
@@ -137,6 +134,21 @@ void trocarRegistros(int posicaoA, int posicaoB) {
     arquivo_bin.write((char *)a, sizeof(Atributos));
 }
 
+void ordenaArquivoBin(){
+    dividirArquivo();
+    unsigned totalElementos;
+    arquivo_bin.seekg(0);
+    arquivo_bin.read((char *)&totalElementos, sizeof(unsigned));
+    ordenarArquivo(1, totalElementos, 1);
+}
+
+unsigned consultaQtdeRegistros(){
+    unsigned totalElementos;
+    arquivo_bin.seekg(0);
+    arquivo_bin.read((char *)&totalElementos, sizeof(unsigned));
+    return totalElementos;
+}
+
 int main() {
     int opcao;
     do {
@@ -146,6 +158,7 @@ int main() {
         cout << "4 - Imprimir todos" << endl;
         cout << "5 - Alterar registro em posicao especifica" << endl;
         cout << "6 - Trocar registros" << endl;
+        cout << "7 - Ordena os arquivos" << endl;
         cout << "0 - Sair" << endl;
         cout << "Opcao: ";
         cin >> opcao;
@@ -234,6 +247,13 @@ int main() {
                 cin >> posicaoB;
                 trocarRegistros(posicaoA, posicaoB);
                 break;
+            }
+            case 7: {
+                unsigned qtdeRegistros = consultaQtdeRegistros();
+                cout << "Ordenando " << qtdeRegistros << endl;
+                ordenaArquivoBin();
+                qtdeRegistros = consultaQtdeRegistros();
+                cout << qtdeRegistros << " ordenados" << endl;
             }
             case 0: {
                 break;
