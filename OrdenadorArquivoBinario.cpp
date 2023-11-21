@@ -314,8 +314,8 @@ void unirArquivos(int etapa, int entradas){ // funcao chamada quando os arquivos
 	arqS1.write((char *)&contadorRegistros,sizeof(contadorRegistros));
 
 
-	arqF1.close(); // fecha os arquivos
-	arqF2.close();
+	// arqF1.close(); // fecha os arquivos
+	// arqF2.close();
 	// arqS1.close();
 	delete registroAux1; // desaloca os registros auxiliares
 	delete registroAux2;
