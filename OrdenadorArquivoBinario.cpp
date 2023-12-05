@@ -20,13 +20,12 @@ using namespace std;
 void unirArquivos(int etapa, int entradas);
 
 void dividirArquivo(){
-	cout << "passou por aqui dividir arquivos" << endl;
 	Atributos* registroAuxiliar = new Atributos;
 	fstream arquivo("call911_1.bin", ios::binary | ios::in | ios::out); // abre o arquivo a ser dividido
-	fstream arqF1("f1.bin", ios::binary | ios::in | ios::out); //cria arquivos auxiliares para realizar a ordenação
-	fstream arqF2("f2.bin", ios::binary | ios::in | ios::out);
-	fstream arqS1("s1.bin", ios::binary | ios::in | ios::out);
-	fstream arqS2("s2.bin", ios::binary | ios::in | ios::out);
+	fstream arqF1("f1.bin", ios::binary | ios::in | ios::out | ios::trunc); //cria arquivos auxiliares para realizar a ordenação
+	fstream arqF2("f2.bin", ios::binary | ios::in | ios::out | ios::trunc);
+	fstream arqS1("s1.bin", ios::binary | ios::in | ios::out | ios::trunc);
+	fstream arqS2("s2.bin", ios::binary | ios::in | ios::out | ios::trunc);
 
     unsigned totalElementos;
     arquivo.seekg(0);
@@ -314,9 +313,9 @@ void unirArquivos(int etapa, int entradas){ // funcao chamada quando os arquivos
 	arqS1.write((char *)&contadorRegistros,sizeof(contadorRegistros));
 
 
-	// arqF1.close(); // fecha os arquivos
-	// arqF2.close();
-	// arqS1.close();
+	arqF1.close(); // fecha os arquivos
+	arqF2.close();
+	arqS1.close();
 	delete registroAux1; // desaloca os registros auxiliares
 	delete registroAux2;
 	remove( "f1.bin" ); // deleta os arquivos auxiliares

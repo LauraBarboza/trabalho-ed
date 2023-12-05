@@ -61,7 +61,9 @@ void converteCSVParaBinario (){
 }
 
 int main() {
+	cout << "Conversor CSV para Binario" << endl;
 	converteCSVParaBinario();
 	arquivo_bin.close();
+	cout << "Conversao realizada com sucesso!" << endl;
 	return 0;
 }

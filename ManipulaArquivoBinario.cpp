@@ -59,15 +59,25 @@ void lerElemento(int posicao) {
     Atributos linha;
     arquivo_bin.seekg(posicao * sizeof(Atributos) + sizeof(unsigned));
     arquivo_bin.read((char *)&linha, sizeof(Atributos));
+    cout << "ID: ";
     imprimirAtributo(linha.id, sizeof(linha.id));
+    cout << "Latitude: ";
     imprimirAtributo(linha.latitude, sizeof(linha.latitude));
+    cout << "Longitude: ";
     imprimirAtributo(linha.longitude, sizeof(linha.longitude));
+    cout << "Descricao: ";
     imprimirAtributo(linha.descricao, sizeof(linha.descricao));
+    cout << "Zip: ";
     imprimirAtributo(linha.zip, sizeof(linha.zip));
+    cout << "Title: ";
     imprimirAtributo(linha.title, sizeof(linha.title));
+    cout << "TimeStamp: ";
     imprimirAtributo(linha.timeStamp, sizeof(linha.timeStamp));
+    cout << "Twp: ";
     imprimirAtributo(linha.twp, sizeof(linha.twp));
+    cout << "Addr: ";
     imprimirAtributo(linha.addr, sizeof(linha.addr));
+    cout << "E: ";
     imprimirAtributo(linha.e, sizeof(linha.e));
     cout << endl;
 }
@@ -77,15 +87,25 @@ void lerIntervaloElementos(int posicaoInicial, int posicaoFinal) {
     arquivo_bin.seekg(posicaoInicial * sizeof(Atributos) + sizeof(unsigned));
     for (int i = posicaoInicial; i <= posicaoFinal; i++) {
         arquivo_bin.read((char *)&linha, sizeof(Atributos));
+        cout << "ID: ";
         imprimirAtributo(linha.id, sizeof(linha.id));
+        cout << "Latitude: ";
         imprimirAtributo(linha.latitude, sizeof(linha.latitude));
+        cout << "Longitude: ";
         imprimirAtributo(linha.longitude, sizeof(linha.longitude));
+        cout << "Descricao: ";
         imprimirAtributo(linha.descricao, sizeof(linha.descricao));
+        cout << "Zip: ";
         imprimirAtributo(linha.zip, sizeof(linha.zip));
+        cout << "Title: ";
         imprimirAtributo(linha.title, sizeof(linha.title));
+        cout << "TimeStamp: ";
         imprimirAtributo(linha.timeStamp, sizeof(linha.timeStamp));
+        cout << "Twp: ";
         imprimirAtributo(linha.twp, sizeof(linha.twp));
+        cout << "Addr: ";
         imprimirAtributo(linha.addr, sizeof(linha.addr));
+        cout << "E: "; 
         imprimirAtributo(linha.e, sizeof(linha.e));
         cout << endl;
     }
@@ -152,6 +172,7 @@ unsigned consultaQtdeRegistros(){
 int main() {
     int opcao;
     do {
+        cout << endl << "Escolha uma opcão: " << endl;
         cout << "1 - Adicionar elemento em posicao especifica" << endl;
         cout << "2 - Ler um elemento em posicao especifica" << endl;
         cout << "3 - Ler intervalo de elementos" << endl;
@@ -189,6 +210,7 @@ int main() {
                 cout << "E: ";
                 cin >> dado->e;
                 adicionarElemento(posicao, dado);
+                cout << "Elemento adicionado!" << endl;
                 break;
             }
             case 2: {
@@ -237,6 +259,7 @@ int main() {
                 cout << "E: ";
                 cin >> dado->e;
                 alterarRegistro(posicao, dado);
+                cout << "Registro alterado!" << endl;
                 break;
             }
             case 6: {
@@ -246,14 +269,15 @@ int main() {
                 cout << "Posicao B: ";
                 cin >> posicaoB;
                 trocarRegistros(posicaoA, posicaoB);
+                cout << "Registros trocados!" << endl;
                 break;
             }
             case 7: {
                 unsigned qtdeRegistros = consultaQtdeRegistros();
-                cout << "Ordenando " << qtdeRegistros << endl;
+                cout << "Ordenando " << qtdeRegistros  << " arquivos..." << endl;
                 ordenaArquivoBin();
                 qtdeRegistros = consultaQtdeRegistros();
-                cout << qtdeRegistros << " ordenados" << endl;
+                cout << qtdeRegistros << " arquivos ordenados com sucesso!" << endl;
             }
             case 0: {
                 break;
